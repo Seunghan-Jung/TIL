@@ -18,3 +18,12 @@ print(str2)
 # aaa\naaa => r string은 \n 
 ```
 
+
+
+## str() 과 repr()
+
+
+
+`str()`은 객체를 단순히 문자열로 표현
+
+`repr()`은 객체를 우리 인간이 이해할 수 있는 문자열로 표현
