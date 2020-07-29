@@ -1,5 +1,125 @@
 # String
 
+**immutable**, **ordered**, **iterable**
+
+
+
+## 문자열 관련 메소드 보기
+
+`dir('string')`
+
+
+
+## 문자열 대체하기
+
+
+
+### .replace()
+
+`string.replace(old, new [, count])`
+
+
+
+```python
+dd
+```
+
+
+
+## 문자열 벗기기
+
+
+
+### .strip()
+
+| strip   | rstrip    | lstrip  |
+| ------- | --------- | ------- |
+| 양쪽 다 | 오른쪽 만 | 왼쪽 만 |
+
+
+
+
+
+
+
+## String to List
+
+### split()
+
+`split(char=' ')` 문자 char를 기준으로 문자열을 쪼개어 리스트로 반환
+
+```python
+'1 2 3 4 5'.split() => [1, 2, 3, 4, 5]
+```
+
+
+
+## List to String
+
+### str()
+
+```python
+str([1, 2, 3, 4]) #=> '[1, 2, 3, 4]'
+```
+
+
+
+### join()
+
+```python
+' '.join([1, 2, 3, 4]) #=> '1 2 3 4'
+```
+
+
+
+## 대소문자 변경
+
+### capitalize()
+
+### title()
+
+### upper()
+
+### lower()
+
+### swapcase()
+
+
+
+## 문자열 검증
+
+### istitle()
+
+### isalpha()
+
+### isspace()
+
+### isupper() / islower()
+
+
+
+
+
+### isdecimal()
+
+순수 int로 형 변환이 가능한 문자열?
+
+### isdigit()
+
+윗 첨자도 숫자로 인식
+
+### isnumeric()
+
+분수의 특수 기호, 특수 로마자도 숫자로 인식
+
+
+
+> **주의**
+>
+> 해당 decimal, digit, numeric은 float 형태의 문자열은 false로 반환
+
+
+
 
 
 ## Raw String

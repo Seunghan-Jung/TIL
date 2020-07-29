@@ -6,7 +6,19 @@ key의 `해시함수`값을 이용한다
 
 
 
-## 생성
+## mutable
+
+
+
+## iterable
+
+
+
+## unordered
+
+
+
+# 딕셔너리 생성
 
 `{key1 : value1, key2 : value2, ...}` 형태로 생성
 
@@ -24,9 +36,11 @@ empty_dict2 = dict()
 
 
 
-## 접근
+# 접근
 
-첨자 `[]`를 이용해 요소에 접근한다.
+## (1) 첨자를 이용
+
+첨자 `[key]`를 이용해 요소에 접근한다.
 
 ```python
 d = {1:'나', '응가':7, 1.1:'바보'}
@@ -36,8 +50,88 @@ print(d['응가'])
 print(d[1.1])
 ```
 
+**해당 key가 없으면 KeyError 발생**
 
 
-## Item 추가하기
+
+## (2) .get(key[, default])
+
+**해당 key가 없으면 `None` 반환**
+
+
+
+
+
+# Item 추가하기
+
+
+
+## (1) 첨자를 이용
 
 첨자 `[]`를 이용해 
+
+
+
+## (2) update()를 이용
+
+
+
+
+
+# Item 삭제하기
+
+## (1) pop()
+
+
+
+
+
+# Dictionary to List
+
+
+
+## (1) key들의 리스트 만들기
+
+### .keys()
+
+
+
+## (1) Value들의 리스트 만들기
+
+### .values()
+
+
+
+## (3) Item들의 리스트 만들기
+
+### .items()
+
+
+
+
+
+# 딕셔너리 순회하기
+
+## (1) key를 이용
+
+일반적으로 for문을 순회하면 `key`값을 가져온다
+
+```python
+D = {'구미' : 75, '서울' : 250, '대전' : 150, '광주' : 75}
+
+for key in D:
+    print(key, D[key])
+```
+
+
+
+위는 다음과 같은 결과다
+
+```python
+for key in D.keys():
+    print(key, D[key])
+```
+
+
+
+## (2) Value만 이용
