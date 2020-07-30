@@ -7,6 +7,3 @@ list, range, set, dictionary, string
 ## ordered
 
 unordered : set, dictionary, int, float
-
-
-
