@@ -1,7 +1,5 @@
 # 예외 처리
 
-
-
 ## 예외 종류
 
 - NameError
@@ -13,11 +11,9 @@
 - ModuleError
 - ImportError
 
-
-
 ## try-except
 
-**기본형태**
+### 기본형태
 
 ```python
 try:
@@ -26,7 +22,7 @@ except:
     <코드블럭 2>
 ```
 
-**확장형태**
+### 확장형태
 
 ```python
 try:
@@ -43,16 +39,24 @@ finally: # 예외 발생하든 안 하든 관계 없이 무조건 실행
     <코드블럭6>
 ```
 
-
-
 ## 예외 발생 시키기
 
-### `raise` 
+### `raise`
 
 예외를 강제로 발생 `raise ValueError('숫자를 입력해주세요')`
 
-### `assert` 
+### `assert`
 
 상태를 주로 검증하기 위해서 `assert Boolean expression, error message`
 
-`assert type(x) == int, '숫자형이 아닙니다.'`
+```python
+x = '10'
+assert type(x) == int, '숫자형이 아닙니다.'
+```
+
+```python
+Traceback (most recent call last):
+  File "test.py", line 3, in <module>
+    assert type(a) == int, '숫자형이 아닙니다.'
+AssertionError: 숫자형이 아닙니다.
+```
