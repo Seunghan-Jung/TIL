@@ -2,45 +2,27 @@
 
 **immutable**, **ordered**, **iterable**
 
-
-
 ## 문자열 관련 메소드 보기
 
 `dir('string')`
 
-
-
 ## 문자열 대체하기
-
-
 
 ### .replace()
 
 `string.replace(old, new [, count])`
 
-
-
 ```python
 dd
 ```
 
-
-
 ## 문자열 벗기기
-
-
 
 ### .strip()
 
 | strip   | rstrip    | lstrip  |
 | ------- | --------- | ------- |
 | 양쪽 다 | 오른쪽 만 | 왼쪽 만 |
-
-
-
-
-
-
 
 ## String to List
 
@@ -52,8 +34,6 @@ dd
 '1 2 3 4 5'.split() => [1, 2, 3, 4, 5]
 ```
 
-
-
 ## List to String
 
 ### str()
@@ -62,29 +42,43 @@ dd
 str([1, 2, 3, 4]) #=> '[1, 2, 3, 4]'
 ```
 
-
-
 ### join()
 
 ```python
 ' '.join([1, 2, 3, 4]) #=> '1 2 3 4'
 ```
 
-
-
 ## 대소문자 변경
 
 ### capitalize()
 
+```python
+'i am a boy'.capitalize() #=> 'I am a boy'
+```
+
 ### title()
+
+```python
+'i am in the house'.title() #=> 'I Am A Boy'
+```
 
 ### upper()
 
+```python
+'i am a boy'.upper() #=> 'I AM A BOY'
+```
+
 ### lower()
+
+```python
+'I Am A Boy'.lower() #=> 'i am a boy'
+```
 
 ### swapcase()
 
-
+```python
+'I am a Boy'.swapcase() #=> 'i AM A bOY'
+```
 
 ## 문자열 검증
 
@@ -95,10 +89,6 @@ str([1, 2, 3, 4]) #=> '[1, 2, 3, 4]'
 ### isspace()
 
 ### isupper() / islower()
-
-
-
-
 
 ### isdecimal()
 
@@ -112,15 +102,9 @@ str([1, 2, 3, 4]) #=> '[1, 2, 3, 4]'
 
 분수의 특수 기호, 특수 로마자도 숫자로 인식
 
-
-
 > **주의**
 >
 > 해당 decimal, digit, numeric은 float 형태의 문자열은 false로 반환
-
-
-
-
 
 ## Raw String
 
@@ -128,21 +112,17 @@ str([1, 2, 3, 4]) #=> '[1, 2, 3, 4]'
 
 ```python
 str1 = 'aaa\naaa'
-str2 = r'aaa\naaa' 
+str2 = r'aaa\naaa'
 
 print(str1)
 # aaa
 # aaa
 
 print(str2)
-# aaa\naaa => r string은 \n 
+# aaa\naaa => r string은 \n
 ```
 
-
-
 ## str() 과 repr()
-
-
 
 `str()`은 객체를 단순히 문자열로 표현
 
