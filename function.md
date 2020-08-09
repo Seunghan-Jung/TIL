@@ -83,7 +83,7 @@ greeting(10)
 
 그렇지 않으면 아래와 같이 문법 오류가 난다
 
-```python
+```txt
 File "<ipython-input-45-fdba0f5df84b>", line 1
   def greeting(name='익명', age)
                                 ^
@@ -121,3 +121,69 @@ print('가', '나', '다', '라', '마', end='.', sep='|')
 ```txt
 가|나|다|라|마.
 ```
+
+### 인자 위치 정리
+
+#### 함수 정의할 때
+
+##### 1. 위치 인자는 기본값 있는 인자보다 앞에 있어야 한다
+
+가능한 경우
+
+`def fun(a, b, c=3):`
+
+불가능한 경우
+
+`def fun(a=1, b, c):`
+
+`def fun(a, b=1, c, d=5):`
+
+##### 2. 가변키워드인자는 무조건 맨 뒤에 있어야 한다
+
+가능한 경우
+
+`def fun(a, b, c=3, **kwargs)`
+
+불가능한 경우
+
+`def fun(a, b, **kwargs, c=3)`
+
+##### 3. 가변 인자는 가변키워드보다 앞이면 어디든 올 수 있다.
+
+즉, `2`번 조건만 만족하면 가변인자 위치는 신경 쓸 필요 없다.
+
+**가능한 경우**
+
+`def fun(*args, a, b):`
+
+`def fun(a, *args, b):`
+
+`def fun(a, b, *args):`
+
+`def fun(a, b=1, *args):`
+
+`def fun(a, b, *args, c=1)`
+
+`def fun(a, b=1, *args, c=1)`
+
+`def fun(a, *args, b=1, **kwargs)`
+
+**불가능한 경우**
+
+`def fun(a, b, **kwargs, *args)`
+
+#### 함수 호출할 때 
+
+##### 1. 위치 인자가 앞 키워드 인자가 뒤
+
+가능한 경우
+
+`fun(1, 2, a=3)`
+
+`fun(1, 2, a=3, b=7)`
+
+불가능한 경우
+
+`fun(a=3, 1)`
+
+`fun(a=3, 1, b=2)`
