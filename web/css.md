@@ -34,3 +34,27 @@ CSS position 속성은 문서 상에서 요소를 배치하는 방법을 지정�
   - relative: static 위치를 기준으로 이동
   - absolute: 가장 가까이 있는 relative 부모 조상 요소를 기준으로 이동
   - fixed: 부모 요소와 관계 없이 브라우저를 기준으로 이동 (고정 위치)
+
+## flexbox
+
+- 배치 방향 설정 (메인축 방향 변경)
+  - flex-direction
+  - flexbox는 단방향 레이아웃이기 때문
+- 메인축 방향 정렬
+  - justify-content
+- 교차축 방향 정렬
+  - align-items
+
+- content: 여러 줄
+- items: 한 줄
+- self: flex item 개별 요소
+
+- justify-content:
+  - flex-start, flex-end, center, space-between, space-around, space-evenly
+- align-items:
+  - flex-start, flex-end, center
+
+부모 container에 flex 선언시
+
+1. item은 행으로 나열된다.
+2. ㅇㄹㄹ
