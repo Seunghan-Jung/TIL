@@ -95,3 +95,17 @@ for key in D.keys():
 ```
 
 ### (2) Value만 이용
+
+```python
+for value in D.values():
+    print(value)
+```
+
+## 딕셔너리 기본값처리
+
+[딕셔너리 기본값 처리](https://www.daleseo.com/python-collections-defaultdict/)
+
+### (1) 일반적인 방법
+
+
+
