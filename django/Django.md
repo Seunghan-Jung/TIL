@@ -54,7 +54,7 @@ MTV(MVC 패턴)
 
 path('url 패턴/', 실행되어야 하는 views에 있는 함수, 해당 path의 별명)
 
-- 많이 놓치즌 ㄴ부분: url패턴뒤에 슬러쉬
+- 많이 놓치는 부분: url패턴뒤에 슬러쉬
 
 - views.py에서 해야할 일
   - 함수를 정의(첫번째 인자로 request 필수!!! 꼭!!! 필수!!)
@@ -66,7 +66,7 @@ path('url 패턴/', 실행되어야 하는 views에 있는 함수, 해당 path�
 
 ## Django Template Languague
 
-- django emplate system에서 사용하는 built-in template system이다
+- django template system에서 사용하는 built-in template system이다
 - 조건 반복 치환 필터 변수 등의 기능을 제공
 - 프로그래밍적 로직이 아니라 프레젠테이션을 표현하기 위한 것
 - 파이썬 처럼 if, for을 사용할 수 있지만 이거는 단순히 python 코드로 실행되는 것이 아닙니다.
@@ -80,8 +80,9 @@ Syntax
 - Template Variable
   - html과 같은 template에서 views.py에서 준비한 변수를 가져다가 쓰는 방법
   - render() 세번째 인자로 `{key: value}`와 같이 딕셔너리 형태로 넘겨주면 Template에서 key를 이용하여 value를 가져올 수 있다.
+
     ```python
-    content = {'key': value}
+    context = {'key': value}
     return render(request, 'index.html', context)
     ```
 
@@ -119,7 +120,7 @@ Syntax
   - 주석으로 나타내고 싶을 때는 : `{# #}` or `{% comment %}`
 
     ```html
-    <!-- <h1> {#{ i * 2 }#}</h1> -->
+    <h1> {#{ i * 2 }#}</h1>
     {% comment %} <h1>{{ i * 2 }}</h1> {% comment %}
     ```
 
@@ -142,6 +143,7 @@ Syntax
       ```
 
     - if 태그
+      
       - 조건을 구분하기 위해 사용
 
 ## 템플릿 시스템 설계 철학
@@ -149,12 +151,12 @@ Syntax
 - 장고는 템플릿 시스템이 표현을 제어하는 도구이자 표현에 관련된 로직일뿐이라고 생각한다.
 - 템플릿 시스템에서는 이러한 기본 목표를 넘어서는 기능을 지원해서는 안 된다.
 
-<<<<<<< HEAD
 ## Model
 
 - DB에 데이터를 저장하고 가져오는 것
 - SQL ( select * from table;)
 - ORM
+  
   - 쿼리를 python에서 object로 사용할 수 있게 해줌
 - `model.py`에 모델 클래스를 정의를 해서 사용할 수 있음
   - class: 테이블명(models.Model):
@@ -266,12 +268,339 @@ Syntax
 ### UPDATE
 
 1. 인스턴스의 변수 값을 변경
-2. save() 메소드를 호출하여 DB에 반영
-=======
+2.  save() 메소드를 호출하여 DB에 반영
+
 ## 템플릿 확장하기
 
 1. base.html 생성하기
 2. base.html을 settings.py에 등록하기
 3. 상속하려는 템플릿에서 첫번째 줄에 {% extends 'base.html' %} 선언하기
 4. {% block 블럭명 %}{% endblock %} 사이에 코드 작성하기
->>>>>>> 1018ef836f8e78fa169ad7b179ea4aa68645051d
+
+## ORM
+
+### QuerySet
+
+### QuerySet API
+
+#### Methods that return new QuerySets
+
+##### filter(**kwargs)
+
+##### exclude(**kwargs)
+
+다음의 예는 `pub_date`가 2005년 1월 3일 이후 **이면서** `headline`이 'Hello'인 것을 제외
+
+```python
+Entry.ojbects.exclude(pub_date__gt=datetime.date(2005, 1, 3), headline='Hello')
+```
+
+```sql
+SELECT ...
+WHERE NOT (pub_date > '2005-1-3' AND headline = 'Hello')
+```
+
+다음의 예는 `pub_date`가 2005년 1월 3일 이후 **이거나** `headline`이 'Hello'인 것을 제외
+
+```python
+Entry.objects.exclude(pub_date__gt=datetime.date(2005, 1, 3)).exclude(headline='Hello')
+```
+
+```sql
+SELECT ...
+WHERE NOT pub_date > '2005-1-3'
+	AND NOT headline = 'Hello'
+```
+
+##### annotate(*args, **kwargs)
+
+```python
+>>> from django.db.models import Count
+>>> q = Blog.objects.annotate(Count('entry'))
+>>> q[0].entry__count
+42
+```
+
+```python
+>>> q = Blog.objects.annotate(number_of_entries=Count('entry'))
+>>> q[0].number_of_entries
+42
+```
+
+##### order_by(*fields)
+
+```python
+# 오름차순 정렬
+Entry.objects.filter(pub_date__year=2005).order_by('pub_date')
+# 내림차순 정렬
+Entry.objects.filter(pub_date__year=2005).order_by('-pub_date')
+# 랜덤 정렬
+Entry.objects.filter(pub_date__year=2005).order_by('?')
+```
+
+오름차순, 내림차순을 정할 때 `asc()` 또는 `desc()` 함수를 이용할 수도 있다.
+
+```python
+Entry.objects.order_by(Coalesce('summary', 'headline').desc())
+```
+
+만일, 다른 모델을 참조하는 필드를 기준으로 정렬한다고 할때, 해당 모델의 Meta.ordering이 정의되지 않았다면 default로 해당 모델의 pk를 기준으로 정렬된다.
+
+```python
+Entry.objects.order_by('blog')
+```
+
+위 문장은 다음 문장과 같다:
+
+```python
+Entry.objects.order_by('blog__id')
+```
+
+If `Blog` had `ordering = ['name']`, then the first queryset would be identical to:
+
+```python
+Entry.objects.order_by('blog__name')
+```
+
+##### distinct(*fields)
+
+PostgreSQL에서만 인자를 넘길 수 있다.
+
+```python
+Author.objects.distinct()
+```
+
+##### values(*fields, **expressions)
+
+필드들과 값의 딕셔너리 형태의 QuerySet을 리턴한다.
+
+```python
+# 
+>>> Blog.objects.filter(name__startswith='Beatles')
+<QuerySet [<Blog: Beatles Blog>]>
+
+#
+>>> Blog.objects.filter(name__startswith='Beatles').values()
+<QuerySet [{'id': 1, 'name': 'Beatles Blog', 'tagline': 'All the latest Beatles news.'}]>
+```
+
+- 필드명을 인자로 넘겨서 필요한 필드들만 가져올 수 있다.
+
+  ```python
+  >>> Blog.objects.values('id', 'name')
+  <QuerySet [{'id':1, 'name': 'Beatles Blog'}]>
+  ```
+
+  
+
+#### Operators that return new QuerySets
+
+##### AND(&)
+
+다음 문장들은 모두 동일하다.
+
+```python
+Model.ojbects.filter(x=1) & Model.objects.filter(y=2)
+Model.objects.filter(x=1, y=2)
+from django.db.models import Q
+Model.objects.filter(Q(x=1) & Q(y=2))
+```
+
+```sql
+SELECT ... WHERE x=1 AND y=2
+```
+
+##### OR(|)
+
+다음 문장들은 모두  동일하다
+
+```python
+Model.objects.filter(x=1) | Model.objects.filter(y=2)
+from django.db.models import Q
+Model.objects.filter(Q(x=1) | Q(y=2))
+```
+
+```sql
+SELECT ... WHERE x=1 OR y=2
+```
+
+
+
+### Field lookups
+
+- `exact` & `iexact`
+
+  - `Blog.objects.get(name__exact='beatles blog')`
+  - `SELECT ... SELECT name LIKE 'beatles blog')`
+  - `필드_exact=None`은 `필드_isnull=True`와 동일
+
+- `contains` & `icontains`
+
+  ```python
+  Entry.objects.get(headline__contains='Lemmon')
+  ```
+
+  ```sql
+  SELECT ... WHERE headline LIKE '%Lemmon%';
+  ```
+
+- `in`
+
+  ```python
+  Entry.objects.filter(id__in=[1, 3, 4])
+  Entry.objects.filter(headline__in='abc')
+  ```
+
+  ```sql
+  SELECT ... WHERE id IN (1, 3, 4);
+  SELECT ... WHERE headline IN ('a', 'b', 'c');
+  ```
+
+- `gt` & `gte` & `lt` & `lte`
+
+- `statswith` & `istartswith`
+
+  ```python
+  ENtry.objects.filter(headline__startswith='Lemmon')
+  ```
+
+  ```sql
+  SELECT ... WHERE headline LIKE 'Lemmon%';
+  ```
+
+- `endwith` & `iendwith`
+
+  ```python
+  Entry.objects.filter(headline__endwithd='Lemmon')
+  ```
+
+  ```sql
+  SELECT ... WHERE headline LIKE '%Lemmon')
+  ```
+
+- `range`
+
+  ```python
+  import datetime
+  start_date = datetime.date(2005, 1, 1)
+  end_date = datetime.date(2004, 3, 31)
+  Entry.objects.filter(pub_date__range=(start_date, end_date))
+  ```
+
+  ```sql
+  SELECT ... WHERE pub_date BETWEENE '2005-01-01' and '2005-03-31';
+  ```
+
+- `date`
+
+  ```python
+  Entry.objects.filter(pub_date__date=datetime.date(2005, 1, 1)
+  Entry.objects.filter(pub_date__date__gt=datetime.date(2005, 1, 1)
+  ```
+
+- `year`, `month`, `day`
+
+- `week` & `week_day`
+
+- `time`, `hour`, `minute`, `second`
+
+- `regex`
+
+  ```python
+  Entry.objects.get(title__regex=r'^(An?|The) +')
+  ```
+
+  ```sql
+  SELECT ... WHERE title REGEXP BINARY '^(An?|The) +'; -- MySQL
+  SELECT ... WHERE REGEXP_LIKE(title, '^(An?|The) +', 'c') -- Oracle
+  SELECT ... WHERE title ~ '^(An?|The) +'; -- PostgreSQL
+  SELECT ... WHERE title REGEXP '^(An?|The) +'; -- SQLite
+  ```
+
+### The pk lookup shortcut
+
+편의를 위해 장고는 `pk`라는 lookup shortcut을 제공한다. 다음 세 문장은 모두 같다.
+
+```python
+Blog.objecgts.get(id__exact=14) # Explicit form
+Blog.objects.get(id=14) # __exact is implied
+Blog.objects.get(pk=14) # pk implieds id__exact
+```
+
+query term 과 결합하여 사용 가능하다.
+
+```python
+Blog.objects.filter(pk__in=[1,4,7])
+Blog.objects.filter(pk__gt=14)
+```
+
+pk lookups also work across joins. 다음 세 문장은 모두 같다.
+
+```python
+>>> Entry.objects.filter(blog__id__exact=3) # Explicit form
+>>> Entry.objects.filter(blog__id=3)		# __exact is implied
+>>> Entry.objects.filter(blog__pk=3) 		# __pk implieds __id__exact
+```
+
+### Complex lookups with Q objects
+
+```python
+from django.db.models import Q
+Q(question__startswith='What')
+```
+
+Q 객체는 `&`, `|` 연산을 통해 결합할 수있다. 해당 연산을 통해 새로운 Q 객체를 리턴한다.
+
+```python
+Q(question__startswith='Who') | Q(question__startswith='What')
+```
+
+```python
+WHERE question LIKE 'Who%' OR question LIKE 'What%'
+```
+
+`~` (NOT)연산을 통해 부정을 표현할 수도 있다.
+
+```python
+Q(question__startswith='Who') | ~Q(pub_date__year=2005)
+```
+
+If you provide multiple Q object arguments to a lookup function, the arguments will be "AND"ed torgether.
+
+```python
+Poll.objects.get(
+    Q(question__startswith='Who'),
+    Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6))
+)
+```
+
+```sql
+SELECT * FROM polls WHERE question LIKE 'Who%'
+	AND (pub_date = '2005-05-02' OR pub_date = '2005-05-06')
+```
+
+Lookup 함수는 Q 객체인자와 키워드 인자를 섞어서 받을 수 있다.
+
+```python
+Poll.objects.get(
+	Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)),
+    question__startswith='Who'
+)
+```
+
+### Querying JSONField
+
+### Aggregation
+
+### from SQL to ORM
+
+#### SELECT
+
+`.values()`
+
+#### WHERE
+
+`.fileter()`
+
+#### ORDER BY
+
