@@ -29,3 +29,33 @@
 
     ex) `git mv test.py python/model.py`
 
+## git commit 취소하기
+
+- commit 취소 후 파일들을 staged 상태로
+
+  ```bash
+  $ git reset --sort HEAD^
+  ```
+
+- commit 취소 후 파일들을 unstaged 상태로 워킹 디렉토리에 보존
+
+  ```bash
+  $ git reset --mixed HEAD^ # 기본 옵션
+  $ git reset HEAD^ # 위와 동일
+  $ git reset HEAD~2 # 마지막 2개의 commit을 취소
+  ```
+
+- commit 취소 후 파일들을 unstaged 상태로 워킹 디렉토리에서 삭제
+
+  ```bash
+  git reset --hard HEAD^
+  ```
+
+## commit 메시지 변경하기
+
+커밋 메시지를 잘 못 적은 경우, 아래의 명령어를 통해 메시지를 변경할 수 있다.
+
+```bash
+$ git commit --amend
+```
+
