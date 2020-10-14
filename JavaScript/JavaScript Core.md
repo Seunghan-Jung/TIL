@@ -92,6 +92,8 @@ const z = NaN			// Not a Number
 
 - `null`
 
+  주로 개발자가 의도적으로 빈 값을 넣을 때 사용
+
   ```js
   let a = null
   console.log(a) // null
