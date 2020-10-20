@@ -1,6 +1,8 @@
 # DOM
 
-DOM (Document Object Model)
+DOM (Document Object Model)이란?
+
+
 
 ## 요소 찾기
 
@@ -13,6 +15,34 @@ DOM (Document Object Model)
 - `document.getElementById(id)`
   - `id` : 요소의 id 값
   - 해당 id의 요소는 유일하다고 가정되기 때문에 여러 요소를 반환하는 메서드는 존재하지 않음
+- `document.getElementsByClassName(cls)`
+  - `cls` : 클래스명 문자열
+  - HTMLCollection 객체를 리턴
+- `document.getElementsByTagName(tag)`
+  - `tag`: 태그명 문자열
+  - HTMLCollection 객체를 리턴
+
+> ## `NodeList` VS `HTMLCollection`
+>
+> - HTMLCollection의 항목은 name, id 속성으로도 접근이 가능
+>
+> - NodeList의 항목은 인덱싱으로만 접근 가능
+>
+> - HTMLCollection은 DOM의 변화가 실시간으로 반영이 된다.(live)
+>
+> - 반면에 NodeList는 DOM의 변화가 반영되지 않는다. 정적이다. (non-live)
+>
+> - 문서가 만들어질 때 특별한 HTMLCollection 객체들이 만들어짐
+>
+>   | 속성             | 내용                            |
+>   | ---------------- | ------------------------------- |
+>   | document.forms   | form 태그 요소 모두             |
+>   | document.images  | img 태그 요소 모두              |
+>   | document.anchors | name 속성이 있는 a 태그         |
+>   | document.links   | a 태그 요소 모두                |
+>   | element.children | element 요소의 모든 자식 요소들 |
+>
+>   
 
 ## 요소 수정하기
 
@@ -28,5 +58,20 @@ DOM (Document Object Model)
 
 ## 요소 생성하기
 
+- `document.createElement(tagName)`
 
+## 요소 추가하기
+
+- `appendChild`
+- `append`
+
+> ### append VS appendChild
+>
+> | -                | append()    | appendChild()       |
+> | ---------------- | ----------- | ------------------- |
+> | 타입             | JS 메소드   | DOM 메소드          |
+> | 파라미터         | 여러개 가능 | 1개                 |
+> | 문자열 노드 추가 | 가능        | Element 노드만 가능 |
+> | IE               | 미지원      | 지원                |
+> | 리턴 값          | undefined   | 추가된 노드 반환    |
 
