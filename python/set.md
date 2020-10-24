@@ -106,3 +106,27 @@ print(s) # {1, 2, 3, 4, 5, 6}
 ### .discard()
 
 없어도 **Error 발생하지 않음**
+
+## 집합 연산
+
+- symmetric_difference (대칭차집합)
+
+  ![img](set.assets/1437912471-534f33cf60-AB.png)
+
+  - `.symmetric_difference` or `^`
+
+      ```python
+      >>> A = {1, 2 3, 4, 5}
+      >>> B = {3, 4, 5, 6, 7}
+      >>> A.symmetric_difference(B)
+      {1, 2, 6, 7}
+      >>> A ^ B
+      {1, 2, 6, 7}
+      ```
+
+  - `.symmetric_difference_update`
+
+    해당 set이 대칭차집합의 결과로 `update` 된다.
+
+    
+
