@@ -1,6 +1,6 @@
 # drf-yasg
 
-[공식페이지](*https://github.com/axnsan12/drf-yasg*)
+[공식페이지](https://github.com/axnsan12/drf-yasg)
 
 ![image-20201007011023007](drf-yasg.assets/image-20201007011023007.png)
 
