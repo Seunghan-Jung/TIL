@@ -399,8 +399,127 @@ public class InitParamServlet extends HttpServlet {
 
     - `getSession()` 또는 `getSession(true)`: 기존의 세션 객체가 없으면 새로 생성
     - `getSession(false)`: 기존의 세션 객체 없으면 null 반환
-
+  - 세션이 생성되면 클라이언트에 `JSESSIONID` 라는 이름의 쿠키 값이 생성되는데, 이것이 session id이다.
+  
   - 세션 API 이용하기
 
-- 
+## 서블릿 속성과 스코프
+
+- ServletContext : 애플리케이션 스코프
+- HttpSession : 세션 스코프(해당 브라우저에서만 접속)
+- HttpServletRequest : 리퀘스트 스코프(해당 요청/응답에 대해서만 접근)
+
+## 필터
+
+모든 또는 많은 서블릿마다 똑같이 수행해야하는 일들 (이를테면 응답에 한글이 있어서 인코딩해야 하는 등의 일)에 관한 코드를 모든 서블릿에 작성하는 것은 불편하다. 서블릿에서 처리하기 전 이러한 공통적인 작업을 하나의 코드로 관리할 수 있게 해주는 것이 **Filter API** 이다.
+
+```java
+@WebFilter("/*")
+public class EncoderFilter implements Filter {
+	ServletContext context;
+
+	public void init(FilterConfig fConfig) throws ServletException {
+		context = fConfig.getServletContext();
+	}
+
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws ServletException, IOException {
+		System.out.println("doFilter ȣ��");
+		request.setCharacterEncoding("utf-8");
+
+		long begin = System.currentTimeMillis();
+		chain.doFilter(request, response);
+		long end = System.currentTimeMillis();
+		System.out.println("작업시간:" + (end - begin) + "ms");
+	}
+
+	public void destroy() {
+		System.out.println("destroy 호출");
+	}
+
+}
+```
+
+## 리스너
+
+### HttpSessionBindingListener
+
+세션에 객체를 바인딩(추가)/언바인딩(제거) 할 때마다 실행될 메서드를 설정
+
+`HttpSessionBindingListener` 인터페이스를 구현하고 있는 객체가 세션 객체에 바인딩되면 `valueBound` 메서드가 호출되고, 언바인딩 되면 `valueUnbound` 메서드가 호출 된다.
+
+```java
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
+
+public class LoginImpl implements HttpSessionBindingListener {
+	String user_id;
+	String user_pw;
+	static int total_user = 0;
+
+	public LoginImpl() {
+	}
+
+	public LoginImpl(String user_id, String user_pw) {
+		this.user_id = user_id;
+		this.user_pw = user_pw;
+	}
+
+	@Override
+	public void valueBound(HttpSessionBindingEvent arg0) {
+		System.out.println("사용자 접속");
+		++total_user;
+	}
+
+	@Override
+	public void valueUnbound(HttpSessionBindingEvent arg0) {
+		System.out.println("사용자 접속 해제");
+		total_user--;
+	}
+}
+
+```
+
+### HttpSessionListener
+
+`HttpSession`객체가 생성/소멸 시 실행될 메서드 설정
+
+`HttpSession` 객체가 생성되면 `sessionCreated` 메서드가 호출되고, 삭제되면 `sessionDestroyed` 메서드가 호출된다.
+
+`@WebListener` 어노테이션을 붙여주어야 한다.
+
+```java
+import javax.servlet.annotation.WebListener;
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
+
+@WebListener
+public class LoginImpl implements HttpSessionListener {
+	String user_id;
+	String user_pw;
+	static int total_user = 0;
+
+	public LoginImpl() {
+	}
+
+	public LoginImpl(String user_id, String user_pw) {
+		this.user_id = user_id;
+		this.user_pw = user_pw;
+	}
+
+	@Override
+	public void sessionCreated(HttpSessionEvent arg0) {
+		System.out.println("사용자 접속");
+		++total_user;
+	}
+
+	@Override
+	public void sessionDestroyed(HttpSessionEvent arg0) {
+		System.out.println("사용자 접속 해제");
+		--total_user;
+	}
+
+}
+
+```
 
